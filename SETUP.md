@@ -166,7 +166,6 @@ Step 2. Backend foundation
 - backend/common: SecurityConfig (stateless, CSRF off with a comment explaining bearer tokens, resource server JWT using spring.security.oauth2.resourceserver.jwt.public-key-location, roles claim mapped to ROLE_*, every non-public path requires ROLE_USER, public paths from a property), GlobalExceptionHandler returning {status, error, message, fieldErrors} and never stack traces, NotFoundException and ConflictException.
 - backend/Dockerfile: one multi-stage file with build arg SERVICE, used by every module including discovery-server and api-gateway (Maven build inside Docker so the auditor needs only Docker), JRE 21 runtime, non-root user, MaxRAMPercentage, HEALTHCHECK on /actuator/health.
 - Add discovery-server (8761 bound to 127.0.0.1) and api-gateway (internal only, depends_on discovery-server healthy) to docker-compose.yml with mem_limit.
-- Unit tests: roles claim mapping, error handler output.
 - Verify: Eureka dashboard on http://127.0.0.1:8761 shows API-GATEWAY.
 
 Step 3. user-service (F6, F7, F18, S1, S2, S3)
@@ -178,7 +177,6 @@ Step 3. user-service (F6, F7, F18, S1, S2, S3)
 - 2FA: POST /api/users/me/2fa/setup (returns otpauth URI and QR data URI), /enable {code}, /disable {code}. dev.samstevens.totp. Secret encrypted with AES-GCM using TOTP_ENC_KEY.
 - Watchlist: GET /api/users/me/watchlist, POST and DELETE /api/users/me/watchlist/{movieId}.
 - GET /api/users/me/ratings: reads the user's RATED relationships (F7).
-- Unit tests: password policy, TOTP verify, AES-GCM round trip, login with and without 2FA (mocked repository).
 - Eureka client. Add the service to docker-compose.yml (internal port only, mem_limit, depends_on neo4j and discovery-server healthy). Do the same for every business service in steps 4 to 6.
 
 Step 4. movie-service (F4, F5, F14, F15)
@@ -188,23 +186,21 @@ Step 4. movie-service (F4, F5, F14, F15)
 - POST, PUT, DELETE /api/movies (ADMIN only).
 - GET /api/movies/{id}/similar: item to item Cypher (users who rated this 4+ also rated these 4+), fallback to same genre.
 - GET /api/movies/genres for the search select.
-- Unit tests on the service with a mocked repository.
 
 Step 5. rating-service (F8)
 - Rating as @RelationshipProperties (score, ratedAt) with @TargetNode Movie, to show the SDN mapping for F10.
 - POST /api/ratings {movieId, score 1..5}, PUT /api/ratings/{movieId}, DELETE /api/ratings/{movieId}, GET /api/ratings/me.
 - Before writing, check the movie exists by calling http://movie-service/api/movies/{id} with a @LoadBalanced RestClient (resolved through Eureka), forwarding the caller's bearer token. This is the only call between business services; explain it.
-- Unit tests with mocked repository and mocked movie client.
 
 Step 6. recommendation-service (F11, F12, F13, F17)
 - GET /api/recommendations?genre=&yearFrom=&yearTo=&limit=
 - Algorithm from decisions.md D6: project User-RATED{score}-Movie with a unique graph name, run weighted GDS Node Similarity for the current user (use the filtered variant if the installed GDS version has it in production tier, check with gds.list, otherwise filter the stream), pick movies rated 4+ by similar users and not rated by the current user, score by sum(similarity * score), apply filters, drop the projection in finally. Cold start: top rated movies with the same filters.
 - Return each movie with its score and the names of the similar users that drove it (helps explain accuracy in the audit).
 - Put the Cypher in docs/recommendation.md with a clause by clause explanation and a Mermaid diagram of the flow.
-- Unit tests for the service with a mocked repository.
 
 Step 7. Frontend shell and HTTPS entry point (S4, T2)
 - Angular 20 standalone app with Angular Material, routing, auth interceptor (bearer token, sessionStorage), auth guard, error snackbar on HTTP errors.
+- Generate with `ng new --skip-tests` and set `skipTests: true` for every schematic in angular.json, so no .spec.ts files are created.
 - frontend/Dockerfile: Node build stage, pinned nginx-unprivileged runtime.
 - frontend/nginx.conf: HTTP to HTTPS redirect, TLS from mounted certs, HSTS and basic security headers (CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy), SPA fallback, /api/* proxied to api-gateway:8080, limit_req (api zone and stricter auth zone), limit_conn, limit_req_status 429, small client_max_body_size, proxy timeouts.
 - Complete docker-compose.yml: frontend publishes 443 and 80 only, every service has mem_limit, healthcheck, restart unless-stopped.
@@ -214,12 +210,11 @@ Step 8. Pages (F14 to F21, S2, S3)
 - Login (with 2FA code step), Register (live password policy feedback), Home (movie grid, search bar: title, genre select, year range), Movie details (title, release date, genres, average rating, star rating, watchlist toggle, share, similar movies), My ratings (list, edit, delete), Recommendations (genre and year filters, share per item), Watchlist, Profile (edit, enable or disable 2FA with QR).
 - Share: Web Share API with copy-link fallback (decisions.md D11).
 - Responsive toolbar with a menu on phone width. Loading and empty states.
-- Specs only for the password validator and the auth service.
 
 Step 9. Audit pass (T1, T2, F1)
 - Go through docs/audit-checklist.md line by line and report any gap.
 - README.md: one command start, demo accounts, Neo4j Browser queries for F2 and F3, curl examples per service (F4, F6, F8 via Postman or curl), a "malicious input" curl list (no token, tampered token, mfa token on the API, user token on admin endpoint, invalid JSON, oversized body, score 0 and 6, invalid UUID, Cypher and HTML injection strings in search and fields), the expected status for each, and a stress section with ab showing 429s and the app still responding.
-- Run the curl list against the running stack if you can, otherwise give me the script.
+- Deliverable for T1 and T2: scripts/audit-checks.sh, which runs the malicious input curls and the ab stress test against the running stack and prints expected vs actual status for each line.
 ```
 
 ---

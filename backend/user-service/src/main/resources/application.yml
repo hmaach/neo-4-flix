@@ -1,0 +1,41 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: user-service
+  neo4j:
+    uri: ${NEO4J_URI:bolt://localhost:7687}
+    authentication:
+      username: neo4j
+      password: ${NEO4J_PASSWORD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: file:/secrets/jwt-public.pem
+
+app:
+  jwt:
+    # Only user-service holds the private key: it is the only service that can mint tokens.
+    private-key-location: file:/secrets/jwt-private.pem
+  totp:
+    encryption-key: ${TOTP_ENC_KEY}
+  security:
+    public-paths:
+      - /api/auth/register
+      - /api/auth/login
+      - /api/auth/login/2fa
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

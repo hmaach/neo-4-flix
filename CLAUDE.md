@@ -50,7 +50,7 @@ My priority is the Buy platform. Neo4flix is the minimum that passes every audit
 - Setup once: ./scripts/setup.sh (creates .env, RSA keys in secrets/, mkcert certs in certs/, GDS jar in plugins/)
 - Run: docker compose up --build
 - Backend: cd backend && ./mvnw -B clean verify
-- Frontend: cd frontend && npm ci && npx ng test --watch=false --browsers=ChromeHeadless && npx ng build
+- Frontend: cd frontend && npm ci && npx ng build
 
 ## Code style
 I explain every line to auditors. Write code a junior reads on first pass.
@@ -71,7 +71,8 @@ I explain every line to auditors. Write code a junior reads on first pass.
 - Containers run as non-root. Pin every image tag, no :latest.
 
 ## Tests
-- Unit tests for security logic (password policy, TOTP, JWT, crypto) and service classes with mocked repositories. No live infra in unit tests.
+- No automated tests. Do not write unit tests or Angular specs unless I ask.
+- T1 and T2 are demonstrated with scripts/audit-checks.sh (step 9): malicious input curls and an ab stress test against the running stack, printing expected vs actual status.
 
 ## Git
 - main plus short-lived feat/* branches merged by PR.
