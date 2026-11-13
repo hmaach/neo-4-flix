@@ -1,0 +1,48 @@
+services:
+
+  neo4j:
+    image: neo4j:5.26.33-community
+    container_name: neo4j
+    # Neo4j's own uid. The image entrypoint supports a non-root start; no privilege drop needed.
+    user: "7474:7474"
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD}
+      # Graph Data Science plugin. The jar ships inside the image (/var/lib/neo4j/products); the entrypoint
+      # copies it into the plugins directory at every start, so no download and no volume are needed.
+      NEO4J_PLUGINS: '["graph-data-science"]'
+      NEO4J_dbms_security_procedures_unrestricted: gds.*
+      # Small footprint for a laptop. GDS projections of the seed graph are a few KB.
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 256m
+    ports:
+      # Bound to localhost only: Neo4j Browser and bolt for the audit demo, never exposed on the network.
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    volumes:
+      - neo4j-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    mem_limit: 1g
+    restart: unless-stopped
+
+  # One-shot job: loads seed/seed.cypher once Neo4j is healthy. Idempotent (MERGE), so re-running is safe.
+  neo4j-seed:
+    image: neo4j:5.26.33-community
+    container_name: neo4j-seed
+    user: "7474:7474"
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    volumes:
+      - ./seed:/seed:ro
+    command: ["cypher-shell", "-a", "bolt://neo4j:7687", "-u", "neo4j", "-p", "${NEO4J_PASSWORD}", "-f", "/seed/seed.cypher"]
+    mem_limit: 256m
+    restart: "no"
+
+volumes:
+  neo4j-data:
