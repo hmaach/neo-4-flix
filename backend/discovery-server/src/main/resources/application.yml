@@ -1,0 +1,23 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: discovery-server
+
+eureka:
+  client:
+    # A registry does not register with itself.
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    # Demo scale: show stopped instances leaving the dashboard within seconds instead of keeping them
+    # as a safety net, which is what self preservation does for large clusters.
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 15000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
