@@ -34,7 +34,7 @@ UNWIND [
   {id: '10000000-0000-4000-8000-000000000013', title: 'The Shawshank Redemption', releaseDate: date('1994-09-23'), genres: ['Drama'], overview: 'Two imprisoned men bond over the years and find hope.'},
   {id: '10000000-0000-4000-8000-000000000014', title: 'The Godfather', releaseDate: date('1972-03-24'), genres: ['Drama'], overview: 'The aging patriarch of a crime dynasty transfers control to his reluctant son.'},
   {id: '10000000-0000-4000-8000-000000000015', title: 'Forrest Gump', releaseDate: date('1994-07-06'), genres: ['Drama', 'Romance'], overview: 'A kind man witnesses decades of American history.'},
-  {id: '10000000-0000-4000-8000-000000000016', title: 'Schindler''s List', releaseDate: date('1993-12-15'), genres: ['Drama'], overview: 'A businessman saves more than a thousand Jewish refugees during the Holocaust.'},
+  {id: '10000000-0000-4000-8000-000000000016', title: "Schindler's List", releaseDate: date('1993-12-15'), genres: ['Drama'], overview: 'A businessman saves more than a thousand Jewish refugees during the Holocaust.'},
   {id: '10000000-0000-4000-8000-000000000017', title: 'The Green Mile', releaseDate: date('1999-12-10'), genres: ['Drama'], overview: 'A death row guard discovers that one inmate has a mysterious gift.'},
   {id: '10000000-0000-4000-8000-000000000018', title: 'Good Will Hunting', releaseDate: date('1997-12-05'), genres: ['Drama', 'Romance'], overview: 'A janitor with a gift for mathematics is helped by a therapist.'},
   {id: '10000000-0000-4000-8000-000000000019', title: 'A Beautiful Mind', releaseDate: date('2001-12-21'), genres: ['Drama'], overview: 'A brilliant mathematician struggles with schizophrenia.'},
@@ -53,7 +53,7 @@ UNWIND [
   {id: '10000000-0000-4000-8000-000000000032', title: 'Ratatouille', releaseDate: date('2007-06-29'), genres: ['Animation', 'Comedy'], overview: 'A rat who dreams of becoming a chef teams up with a kitchen worker in Paris.'},
   {id: '10000000-0000-4000-8000-000000000033', title: 'Spider-Man: Into the Spider-Verse', releaseDate: date('2018-12-14'), genres: ['Animation', 'Action'], overview: 'A teenager becomes Spider-Man and meets his counterparts from other dimensions.'},
   {id: '10000000-0000-4000-8000-000000000034', title: 'The Incredibles', releaseDate: date('2004-11-05'), genres: ['Animation', 'Action'], overview: 'A family of undercover superheroes is forced into action.'},
-  {id: '10000000-0000-4000-8000-000000000035', title: 'Get Out', releaseDate: date('2017-02-24'), genres: ['Horror'], overview: 'A young man visits his girlfriend''s family estate and uncovers a disturbing secret.'},
+  {id: '10000000-0000-4000-8000-000000000035', title: 'Get Out', releaseDate: date('2017-02-24'), genres: ['Horror'], overview: "A young man visits his girlfriend's family estate and uncovers a disturbing secret."},
   {id: '10000000-0000-4000-8000-000000000036', title: 'The Conjuring', releaseDate: date('2013-07-19'), genres: ['Horror'], overview: 'Paranormal investigators help a family terrorized by a dark presence.'},
   {id: '10000000-0000-4000-8000-000000000037', title: 'Hereditary', releaseDate: date('2018-06-08'), genres: ['Horror', 'Drama'], overview: 'After the family matriarch dies, her descendants are haunted by their ancestry.'},
   {id: '10000000-0000-4000-8000-000000000038', title: 'La La Land', releaseDate: date('2016-12-09'), genres: ['Romance', 'Drama', 'Comedy'], overview: 'A jazz pianist and an aspiring actress fall in love in Los Angeles.'},
@@ -116,14 +116,14 @@ UNWIND [
   ['deckard', 'Superbad', 1], ['deckard', 'Finding Nemo', 2],
 
   ['andy', 'The Shawshank Redemption', 5], ['andy', 'The Godfather', 5], ['andy', 'The Green Mile', 5], ['andy', 'Forrest Gump', 4],
-  ['andy', 'Good Will Hunting', 4], ['andy', 'Schindler''s List', 5], ['andy', 'A Beautiful Mind', 4],
+  ['andy', 'Good Will Hunting', 4], ['andy', "Schindler's List", 5], ['andy', 'A Beautiful Mind', 4],
   ['andy', 'The Matrix', 2], ['andy', 'Shrek', 2], ['andy', 'The Conjuring', 1],
 
   ['red', 'The Shawshank Redemption', 5], ['red', 'The Pianist', 5], ['red', 'Manchester by the Sea', 4], ['red', 'Marriage Story', 4],
   ['red', 'The Godfather', 4], ['red', 'Good Will Hunting', 5], ['red', 'Nomadland', 4],
   ['red', 'Alien', 2], ['red', 'Toy Story', 3],
 
-  ['vito', 'The Godfather', 5], ['vito', 'Schindler''s List', 5], ['vito', 'The Pianist', 4], ['vito', 'A Beautiful Mind', 5],
+  ['vito', 'The Godfather', 5], ['vito', "Schindler's List", 5], ['vito', 'The Pianist', 4], ['vito', 'A Beautiful Mind', 5],
   ['vito', 'The Pursuit of Happyness', 4], ['vito', 'The Green Mile', 4], ['vito', 'Forrest Gump', 5],
   ['vito', 'Star Wars', 2], ['vito', 'Mad Max: Fury Road', 1],
 
