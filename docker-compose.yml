@@ -7,10 +7,11 @@ services:
     user: "7474:7474"
     environment:
       NEO4J_AUTH: neo4j/${NEO4J_PASSWORD}
-      # Graph Data Science plugin. The jar ships inside the image (/var/lib/neo4j/products); the entrypoint
-      # copies it into the plugins directory at every start, so no download and no volume are needed.
-      NEO4J_PLUGINS: '["graph-data-science"]'
+      # Graph Data Science plugin: the jar is mounted below (downloaded once by scripts/setup.sh).
+      # NEO4J_PLUGINS is not used because it re-downloads the jar on every start.
       NEO4J_dbms_security_procedures_unrestricted: gds.*
+      # Neo4j sends anonymous usage data by default; off for a local demo.
+      NEO4J_dbms_usage__report_enabled: "false"
       # Small footprint for a laptop. GDS projections of the seed graph are a few KB.
       NEO4J_server_memory_heap_initial__size: 512m
       NEO4J_server_memory_heap_max__size: 512m
@@ -21,6 +22,8 @@ services:
       - "127.0.0.1:7687:7687"
     volumes:
       - neo4j-data:/data
+      # GDS jar from scripts/setup.sh, on the image's default plugins directory. Read-only: Neo4j only loads from it.
+      - ./plugins:/var/lib/neo4j/plugins:ro
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:7474 || exit 1"]
       interval: 10s

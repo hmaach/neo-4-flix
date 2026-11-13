@@ -2,6 +2,7 @@
 .env
 secrets/
 certs/
+plugins/
 
 # backend
 backend/**/target/

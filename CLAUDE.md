@@ -43,11 +43,11 @@ My priority is the Buy platform. Neo4flix is the minimum that passes every audit
 - Spring Data Neo4j (bundled with Boot). No Neo4j-OGM dependency: SDN 6+ is its successor.
 - JWT: spring-boot-starter-oauth2-resource-server (Nimbus). user-service signs with the private key, the others verify with the public key. Do not copy Buy's common-security.
 - TOTP: dev.samstevens.totp.
-- Neo4j image pinned (5.26.x community), GDS loaded via NEO4J_PLUGINS.
+- Neo4j image pinned (5.26.x community). GDS jar pinned to the matching version, downloaded once by scripts/setup.sh into plugins/ (gitignored) and bind mounted read-only. Not NEO4J_PLUGINS: it re-downloads the jar on every start.
 - Angular 20, Angular Material 20.
 
 ## Commands
-- Setup once: ./scripts/setup.sh (creates .env, RSA keys in secrets/, mkcert certs in certs/)
+- Setup once: ./scripts/setup.sh (creates .env, RSA keys in secrets/, mkcert certs in certs/, GDS jar in plugins/)
 - Run: docker compose up --build
 - Backend: cd backend && ./mvnw -B clean verify
 - Frontend: cd frontend && npm ci && npx ng test --watch=false --browsers=ChromeHeadless && npx ng build

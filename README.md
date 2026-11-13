@@ -5,7 +5,7 @@ Movie recommendation engine: Neo4j (with Graph Data Science), Spring Boot micros
 ## Start
 
 ```bash
-./scripts/setup.sh          # once: creates .env, JWT keys in secrets/, mkcert certificate in certs/
+./scripts/setup.sh          # once: creates .env, JWT keys in secrets/, mkcert certificate in certs/, downloads the GDS jar into plugins/
 docker compose up --build
 ```
 
