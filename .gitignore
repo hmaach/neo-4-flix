@@ -1,0 +1,18 @@
+# secrets and generated files (created by scripts/setup.sh)
+.env
+secrets/
+certs/
+
+# backend
+backend/**/target/
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# IDE and OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
